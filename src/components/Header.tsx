@@ -42,7 +42,6 @@ function MainLink() {
 
 function PagesLinks() {
   const ids = useMatches();
-  // const currentId = ids[ids.length - 1].id;
   const currentId = ids[1].id;
   return (
     <div className={styles.pages}>
@@ -56,29 +55,3 @@ function PagesLinks() {
     </div>
   );
 }
-
-/*
-function ViewLink({ route, currentId }: { currentId: string; route: AgnosticRouteObject }) {
-  if (route.index) {
-    return (
-      <li>
-        <div>
-          <Link to={route.path!} className={styles.main}>
-            {getHandle(route).title}
-          </Link>
-        </div>
-        <div>
-          <Link to={route.path!} className={styles.main}>
-            <img src={mainPic} srcSet={mainPic + " 2x"} width={120} height={120} alt="" />
-          </Link>
-        </div>
-      </li>
-    );
-  }
-  return (
-    <li className={route.id === currentId ? styles.current : void 0}>
-      <Link to={route.path!}>{getHandle(route).linkText}</Link>
-    </li>
-  );
-}
-*/

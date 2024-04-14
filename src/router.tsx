@@ -1,13 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainPage from "./pages/MainPage.tsx";
 import WorkoutPage from "./pages/workout";
-import CalendarPage from "./pages/CalendarPage.tsx";
-import NutritionPage from "./pages/NutritionPage.tsx";
-import NotesPage from "./pages/NotesPage.tsx";
+import SchedulePage from "./pages/SchedulePage.tsx";
 import Layout from "./Layout.tsx";
 import { RouteHandle } from "./types.ts";
 import { WorkoutEditPage } from "./pages/workout-edit";
-import { pathWorkout } from "./utils.ts";
+import { pathSchedule, pathWorkout } from "./utils.ts";
+import ScheduleEditPage from "./pages/ScheduleEditPage.tsx";
+import NotesPage from "./pages/NotesPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -41,14 +41,24 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: "calendar",
-        Component: CalendarPage,
-        handle: { linkText: "Календарь", title: "Календарь" } as RouteHandle
-      },
-      {
-        path: "nutrition",
-        Component: NutritionPage,
-        handle: { linkText: "Питание", title: "Питание" } as RouteHandle
+        path: pathSchedule,
+        handle: { linkText: "Расписание", title: "Расписание" } as RouteHandle,
+        children: [
+          {
+            index: true,
+            path: "",
+            Component: SchedulePage,
+            handle: { linkText: "Расписание", title: "Расписание" } as RouteHandle
+          },
+          {
+            path: "new",
+            Component: ScheduleEditPage,
+            handle: {
+              linkText: "Добавление расписания",
+              title: "Добавление расписания"
+            } as RouteHandle
+          }
+        ]
       },
       {
         path: "notes",
