@@ -172,6 +172,4 @@ function handleLoad(file: File | null) {
     }
   });
   reader.readAsText(file);
-
-  console.log("load", file);
 }

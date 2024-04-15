@@ -10,14 +10,25 @@ export interface StoreStruct {
   workoutOpenId: string;
   workoutSelected: number[];
   tags: TagStruct[];
-  schedule: ScheduleRow[];
+  schedule: Map<string, ScheduleRow>;
   scheduleYear: number;
   scheduleMonth: number;
+  noticeDate: string;
 }
 
-export type ScheduleRow = { date: string; workoutId: string; time: DayTime; comment?: string };
+export type ScheduleRow = {
+  date: string;
+  children: ScheduleData[];
+};
 
-export type ScheduleDay = { date: string; children: { time: DayTime; label: string }[] };
+export type ScheduleData = { time: DayTime; workoutId: string; comment?: string };
+
+export type ScheduleDay = {
+  date: string;
+  children: ScheduleDayData[];
+};
+
+export type ScheduleDayData = { time: DayTime; label: string; comment?: string };
 
 export interface StoreFile {
   version: number;

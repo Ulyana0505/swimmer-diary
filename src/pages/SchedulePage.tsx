@@ -1,8 +1,9 @@
-import { Button, Group, NumberInput, Stack } from "@mantine/core";
+import { Button, Group, Indicator, NumberInput, Popover, Stack, Text } from "@mantine/core";
 import { useMainStore } from "../store.ts";
 import { useNavigate } from "react-router-dom";
 import { getDayTimeLabel, gotoSchedule } from "../utils.ts";
-import { ScheduleDay } from "../types.ts";
+import { ScheduleDay, ScheduleDayData } from "../types.ts";
+import { useDisclosure } from "@mantine/hooks";
 
 const currentDate = new Date().toJSON().slice(0, 10);
 
@@ -68,38 +69,41 @@ function handleMonth(valSrc: number | string) {
 }
 
 function ViewTable() {
-  const { schedule, workouts, scheduleYear, scheduleMonth } = useMainStore.getState();
-  const mapIds = new Map(workouts.map((r) => [r.id, r.label]));
-  const currentList = schedule.filter((r) =>
-    r.date.startsWith(`${scheduleYear}-${("0" + scheduleMonth).slice(-2)}-`)
-  );
-  let hasToday = false;
-  const grouped = [] as ScheduleDay[];
-  for (const row of currentList) {
-    let current = grouped[grouped.length - 1];
-    if (!current || current.date !== row.date) {
-      grouped.push({
-        date: row.date,
-        children: []
-      });
-      current = grouped[grouped.length - 1];
-    }
-    current.children.push({ time: row.time, label: String(mapIds.get(row.workoutId)) });
-    if (row.date === currentDate) hasToday = true;
-  }
-
-  if (!hasToday) {
-    grouped.push({ date: currentDate, children: [] });
-    grouped.sort((a, b) => a.date.localeCompare(b.date));
-  }
-
   return (
     <Stack>
-      {grouped.map((r) => (
+      {getFiltered().map((r) => (
         <ViewDay key={r.date} row={r} />
       ))}
     </Stack>
   );
+}
+
+function getFiltered() {
+  const { schedule, workouts, scheduleYear, scheduleMonth } = useMainStore.getState();
+  const mapIds = new Map(workouts.map((r) => [r.id, r.label]));
+  const filtered = [] as ScheduleDay[];
+  let hasToday = false;
+  for (let day = 1; day < 32; day++) {
+    const dateKey = `${scheduleYear}-${("0" + scheduleMonth).slice(-2)}-${("0" + day).slice(-2)}`;
+    const current = schedule.get(dateKey);
+    if (current) {
+      filtered.push({
+        date: current.date,
+        children: current.children.map((r) => ({
+          time: r.time,
+          label: String(mapIds.get(r.workoutId)),
+          comment: r.comment
+        }))
+      });
+      if (current.date === currentDate) hasToday = true;
+    }
+  }
+  if (!hasToday && filtered.length && currentDate.slice(0, 7) === filtered[0].date.slice(0, 7)) {
+    filtered.push({ date: currentDate, children: [] });
+    filtered.sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  return filtered;
 }
 
 function ViewDay({ row }: { row: ScheduleDay }) {
@@ -109,10 +113,35 @@ function ViewDay({ row }: { row: ScheduleDay }) {
       <Stack gap={0}>
         {row.children.map((r) => (
           <Group key={r.time}>
-            {getDayTimeLabel(r.time)} {r.label}
+            <ViewWorkout data={r} />
           </Group>
         ))}
       </Stack>
     </Group>
   );
+}
+
+function ViewWorkout({ data }: { data: ScheduleDayData }) {
+  const [opened, { close, open }] = useDisclosure(false);
+  const text = `${getDayTimeLabel(data.time)} ${data.label}`;
+  if (data.comment) {
+    return (
+      <Popover width={300} shadow="lg" radius="md" opened={opened}>
+        <Popover.Target>
+          <Indicator withBorder position="middle-end">
+            <Text mr={8} onMouseEnter={open} onMouseLeave={close}>
+              {text}
+            </Text>
+          </Indicator>
+        </Popover.Target>
+        <Popover.Dropdown style={{ pointerEvents: "none" }}>
+          <Text size="sm" style={{ whiteSpace: "pre" }}>
+            {data.comment}
+          </Text>
+        </Popover.Dropdown>
+      </Popover>
+    );
+  } else {
+    return <Text mr={8}>{text}</Text>;
+  }
 }

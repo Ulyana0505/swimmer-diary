@@ -1,4 +1,4 @@
-import { RouteHandle, ScheduleRow, TagStruct } from "./types.ts";
+import { RouteHandle, TagStruct } from "./types.ts";
 import { AgnosticRouteObject } from "@remix-run/router/utils.ts";
 
 export const cssBlock = "block";
@@ -45,10 +45,6 @@ export function tagsStringToId(tags: TagStruct[], selected: string[]): number[] 
     const v = map.get(c);
     return v ? [...p, v.id] : p;
   }, [] as number[]);
-}
-
-export function getScheduleKey(r: ScheduleRow) {
-  return `${r.date}*${r.time}`;
 }
 
 export function getDayTimeLabel(v: DayTime) {

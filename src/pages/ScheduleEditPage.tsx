@@ -4,8 +4,8 @@ import { z } from "zod";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DateInput } from "@mantine/dates";
-import { DayTime, getDayTimeLabel, getScheduleKey } from "../utils.ts";
-import { ScheduleRow } from "../types.ts";
+import { DayTime, getDayTimeLabel, gotoSchedule } from "../utils.ts";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   workout: z.string().trim().min(1, "Обязательное значение"),
@@ -28,26 +28,34 @@ export default function ScheduleEditPage() {
       amount: 1
     }
   });
+  const navigate = useNavigate();
 
   function onSubmit(data: FormData) {
     const { schedule, workouts } = useMainStore.getState();
     const workoutId = workouts.find((r) => r.label === data.workout);
     const dayTime = data.dayTime;
-    const map = new Map(schedule.map((r) => [getScheduleKey(r), r]));
     const startFrom = new Date(data.startFrom);
     for (let i = 0; i < data.amount; i++) {
-      const row = {
-        date: startFrom.toJSON().slice(0, 10),
-        time: dayTime,
-        workoutId: workoutId!.id
-      } as ScheduleRow;
-      map.set(getScheduleKey(row), row);
+      const date = startFrom.toJSON().slice(0, 10);
+      const currentRow = schedule.get(date);
+      if (currentRow) {
+        const currentTime = currentRow.children.find(({ time }) => time === dayTime);
+        if (currentTime) {
+          currentTime.workoutId = workoutId!.id;
+          delete currentTime.comment;
+        } else {
+          currentRow.children.push({ time: dayTime, workoutId: workoutId!.id });
+          currentRow.children.sort((a, b) => a.time - b.time);
+        }
+      } else {
+        schedule.set(date, { date, children: [{ time: dayTime, workoutId: workoutId!.id }] });
+      }
       startFrom.setDate(startFrom.getDate() + data.period);
     }
-    const next = [...map.values()].sort((a, b) =>
-      getScheduleKey(a).localeCompare(getScheduleKey(b))
-    );
-    useMainStore.setState({ schedule: next });
+    useMainStore.setState({
+      schedule: new Map([...schedule.entries()].sort((a, b) => a[0].localeCompare(b[0])))
+    });
+    navigate(gotoSchedule(""));
   }
 
   return (
