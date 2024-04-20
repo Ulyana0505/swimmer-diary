@@ -12,6 +12,7 @@ function init(): StoreStruct {
     tags: [],
     schedule: new Map(),
     // ---
+    scheduleRemove: false,
     scheduleYear: currentDate.getFullYear(),
     scheduleMonth: currentDate.getMonth() + 1,
     noticeDate: ""
@@ -36,7 +37,13 @@ export const useMainStore = createWithEqualityFn(
         }
       },
       setItem: (name, newValue) => {
-        const { scheduleMonth: _1, scheduleYear: _2, noticeDate: _3, ...data } = newValue.state;
+        const {
+          scheduleMonth: _1,
+          scheduleYear: _2,
+          noticeDate: _3,
+          scheduleRemove: _4,
+          ...data
+        } = newValue.state;
         const str = JSON.stringify({
           ...data,
           schedule: Array.from(data.schedule.entries())

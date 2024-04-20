@@ -1,9 +1,20 @@
-import { Button, Group, Indicator, NumberInput, Popover, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Indicator,
+  NumberInput,
+  Popover,
+  Stack,
+  Switch,
+  Text
+} from "@mantine/core";
 import { useMainStore } from "../store.ts";
 import { useNavigate } from "react-router-dom";
 import { getDayTimeLabel, gotoSchedule } from "../utils.ts";
 import { ScheduleDay, ScheduleDayData } from "../types.ts";
 import { useDisclosure } from "@mantine/hooks";
+import IconRemove from "../assets/clear-circle.svg?react";
 
 const currentDate = new Date().toJSON().slice(0, 10);
 
@@ -38,9 +49,17 @@ export default function SchedulePage() {
             defaultValue={scheduleMonth}
             onChange={handleMonth}
           />
-          <Button variant="outline" color="violet" radius="xl" onClick={handleAdd}>
-            Добавить тренировку
-          </Button>
+          <Group>
+            <Button variant="outline" color="violet" radius="xl" onClick={handleAdd}>
+              Добавить тренировку
+            </Button>
+            <Switch
+              label="режим удаления"
+              onChange={(event) =>
+                useMainStore.setState({ scheduleRemove: event.currentTarget.checked })
+              }
+            />
+          </Group>
         </Group>
         <ViewTable />
       </Stack>
@@ -107,12 +126,35 @@ function getFiltered() {
 }
 
 function ViewDay({ row }: { row: ScheduleDay }) {
+  const scheduleRemove = useMainStore(({ scheduleRemove }) => scheduleRemove);
+
+  function handleERemove(e: React.MouseEvent<HTMLButtonElement>) {
+    const itemSrc = (e.currentTarget as HTMLButtonElement).dataset.item;
+    if (itemSrc) {
+      const time = +itemSrc;
+      const { schedule } = useMainStore.getState();
+      const current = schedule.get(row.date);
+      if (current) {
+        current.children = current.children.filter((r) => r.time !== time);
+        if (!current.children.length) {
+          schedule.delete(row.date);
+        }
+        useMainStore.setState({ schedule: new Map(schedule) });
+      }
+    }
+  }
+
   return (
     <Group bg={currentDate === row.date ? "yellow" : void 0}>
       {row.date}
       <Stack gap={0}>
         {row.children.map((r) => (
           <Group key={r.time}>
+            {scheduleRemove ? (
+              <ActionIcon variant="transparent" onClick={handleERemove} data-item={r.time}>
+                <IconRemove width={20} height={20} fill="none" />
+              </ActionIcon>
+            ) : null}
             <ViewWorkout data={r} />
           </Group>
         ))}

@@ -11,6 +11,7 @@ export interface StoreStruct {
   workoutSelected: number[];
   tags: TagStruct[];
   schedule: Map<string, ScheduleRow>;
+  scheduleRemove: boolean;
   scheduleYear: number;
   scheduleMonth: number;
   noticeDate: string;
