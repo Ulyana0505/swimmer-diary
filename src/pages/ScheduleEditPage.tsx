@@ -66,7 +66,9 @@ export default function ScheduleEditPage() {
         <FieldNumber name="period" label="Периодичность [дней]" />
         <FieldNumber name="amount" label="Количество" />
         <SelectDayTime name="dayTime" />
-        <Button onClick={form.handleSubmit(onSubmit)}>Добавить расписание</Button>
+        <Button onClick={form.handleSubmit(onSubmit)} data-testid="btn-add">
+          Добавить расписание
+        </Button>
       </Stack>
     </FormProvider>
   );
@@ -110,6 +112,7 @@ function StartFrom(p: Props) {
       defaultValue={getValues()[p.name] as Date}
       onChange={(value) => register(p.name).onChange({ target: { value, name: p.name } })}
       error={errors[p.name]?.message}
+      data-testid="date-from"
     />
   );
 }

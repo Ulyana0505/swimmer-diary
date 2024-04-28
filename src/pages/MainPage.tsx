@@ -15,7 +15,7 @@ import { notificationError, notificationSuccess } from "../notification.ts";
 import { useRef, useState } from "react";
 import IconEdit from "../assets/edit.svg?react";
 import IconAdd from "../assets/add.svg?react";
-import { modals } from "@mantine/modals";
+import { useModals } from "@mantine/modals";
 
 export default function MainPage() {
   return (
@@ -23,7 +23,7 @@ export default function MainPage() {
       <Stack>
         <Title order={5}>Настройки и данные</Title>
         <Group>
-          <FileButton onChange={handleLoad} accept=".json">
+          <FileButton onChange={handleLoad} accept=".json" data-testid="data-file">
             {(props) => <Button {...props}>Загрузить из файла</Button>}
           </FileButton>
           <Button onClick={handleSave}>Сохранить в файл</Button>
@@ -64,8 +64,8 @@ function AddTag() {
 
   return (
     <Group>
-      <TextInput ref={ref} />
-      <ActionIcon variant="transparent" onClick={handleAdd}>
+      <TextInput ref={ref} data-testid="input-tag" />
+      <ActionIcon variant="transparent" onClick={handleAdd} data-testid="add-tag">
         <IconAdd width={30} height={30} fill="none" />
       </ActionIcon>
     </Group>
@@ -73,6 +73,7 @@ function AddTag() {
 }
 
 function TagEdit({ row }: { row: TagStruct }) {
+  const modals = useModals();
   const [edit, setEdit] = useState(false);
 
   const ref = useRef<HTMLInputElement>(null);
@@ -113,8 +114,8 @@ function TagEdit({ row }: { row: TagStruct }) {
 
   return (
     <Group>
-      <TextInput defaultValue={row.label} ref={ref} disabled={!edit} />
-      <ActionIcon variant="transparent" onClick={handleEdit}>
+      <TextInput defaultValue={row.label} ref={ref} disabled={!edit} data-testid="content-tag" />
+      <ActionIcon variant="transparent" onClick={handleEdit} data-testid="edit-tag">
         <IconEdit width={20} height={20} fill="none" />
       </ActionIcon>
     </Group>
@@ -131,7 +132,7 @@ function handleTagRemove(id: number) {
   useMainStore.setState({
     tags: tags.filter((r) => r.id !== id),
     workouts: [...workouts],
-    workoutSelected: [...workoutSelected.filter((r) => r === id)]
+    workoutSelected: [...workoutSelected.filter((r) => r !== id)]
   });
 }
 
@@ -151,25 +152,31 @@ function handleSave() {
   URL.revokeObjectURL(jsonObjectUrl);
 }
 
-function handleLoad(file: File | null) {
-  if (!file) return;
+export async function handleLoad(file: File | null) {
+  return new Promise<boolean>((resolve) => {
+    if (!file) {
+      resolve(false);
+      return;
+    }
 
-  const reader = new FileReader();
-  reader.addEventListener("load", function (e) {
-    const text = e.target?.result;
-    if (typeof text == "string") {
+    const reader = new FileReader();
+    reader.addEventListener("load", function (e) {
+      const text = e.target?.result as string;
       try {
         const data = JSON.parse(text) as StoreFile;
         if (data.version === appDataVersion) {
           useMainStore.setState({ workouts: data.workouts, tags: data.tags });
           notificationSuccess("Файл успешно загружен");
+          resolve(true);
         } else {
           notificationError("Версия файла не совпадает с актуальной");
+          resolve(false);
         }
       } catch (e) {
         notificationError("Ошибка при чтении файла");
+        resolve(false);
       }
-    }
+    });
+    reader.readAsText(file);
   });
-  reader.readAsText(file);
 }

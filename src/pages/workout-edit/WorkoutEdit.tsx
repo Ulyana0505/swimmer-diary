@@ -1,12 +1,12 @@
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Group, MultiSelect, Stack, Text, Textarea, TextInput } from "@mantine/core";
+import { Button, Chip, Group, Stack, Text, Textarea, TextInput } from "@mantine/core";
 import { useMainStore } from "../../store.ts";
 import { nanoid } from "nanoid";
 import { WorkoutStruct } from "../../types.ts";
 import { modals } from "@mantine/modals";
-import { gotoWorkout, tagsStringToId, tagsToString } from "../../utils.ts";
+import { gotoWorkout } from "../../utils.ts";
 import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
@@ -26,17 +26,19 @@ export default function WorkoutEdit({ currentId }: { currentId: string }) {
   const navigate = useNavigate();
   const prev = useMainStore.getState().workouts.find((r) => r.id === currentId);
   const tags = useMainStore(({ tags }) => tags);
+
+  const currentTags = prev ? prev.tags.map(String) : [];
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       ...prev,
-      tags: []
+      tags: currentTags
     }
   });
 
   function onSubmit(data: FormData) {
     const { workouts } = useMainStore.getState();
-    const tagsNew = tagsStringToId(tags, data.tags);
+    const tagsNew = data.tags.map(Number);
     if (data.id) {
       const ind = workouts.findIndex((r) => r.id === data.id);
       workouts[ind] = { ...data, tags: tagsNew } as WorkoutStruct;
@@ -86,7 +88,15 @@ export default function WorkoutEdit({ currentId }: { currentId: string }) {
               label="Название тренировки"
               placeholder="Название тренировки"
             />
-            <MultiSelect label="Метки" data={tagsToString(tags)} onChange={onTags} />
+            <Group>
+              <Chip.Group defaultValue={currentTags} onChange={onTags} multiple>
+                {tags.map((t) => (
+                  <Chip value={String(t.id)} key={t.id} color="orange" size="xs">
+                    {t.label}
+                  </Chip>
+                ))}
+              </Chip.Group>
+            </Group>
             <FieldTextarea name="warm_up" label="Разминка" placeholder="Разминка" />
             <FieldTextarea name="basics" label="Основное" placeholder="Основное" />
             <FieldTextarea name="hitch" label="Заминка" placeholder="Заминка" />
@@ -101,7 +111,9 @@ export default function WorkoutEdit({ currentId }: { currentId: string }) {
               <Button variant="outline" onClick={onClose}>
                 Отмена
               </Button>
-              <Button onClick={form.handleSubmit(onSubmit)}>{labelConfirm}</Button>
+              <Button onClick={form.handleSubmit(onSubmit)} data-testid="btn-confirm">
+                {labelConfirm}
+              </Button>
             </Group>
           </Stack>
         </form>

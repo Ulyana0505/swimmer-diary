@@ -40,6 +40,7 @@ export default function SchedulePage() {
             max={2050}
             defaultValue={scheduleYear}
             onChange={handleYear}
+            data-testid="input-year"
           />
           <NumberInput
             key={scheduleMonth}
@@ -48,6 +49,7 @@ export default function SchedulePage() {
             max={13}
             defaultValue={scheduleMonth}
             onChange={handleMonth}
+            data-testid="input-month"
           />
           <Group>
             <Button variant="outline" color="violet" radius="xl" onClick={handleAdd}>
@@ -151,7 +153,11 @@ function ViewDay({ row }: { row: ScheduleDay }) {
         {row.children.map((r) => (
           <Group key={r.time}>
             {scheduleRemove ? (
-              <ActionIcon variant="transparent" onClick={handleERemove} data-item={r.time}>
+              <ActionIcon
+                variant="transparent"
+                onClick={handleERemove}
+                data-item={r.time}
+                data-testid="btn-remove">
                 <IconRemove width={20} height={20} fill="none" />
               </ActionIcon>
             ) : null}

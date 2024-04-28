@@ -33,7 +33,7 @@ function ViewNotes() {
   return (
     <Stack>
       <Group align="center" gap={3}>
-        <ActionIcon variant="transparent" onClick={handlePrev}>
+        <ActionIcon variant="transparent" onClick={handlePrev} data-testid="btn-prev">
           <IconLeft width={26} height={26} fill="none" />
         </ActionIcon>
         <DateInput
@@ -42,7 +42,7 @@ function ViewNotes() {
           value={new Date(noticeDate)}
           readOnly
         />
-        <ActionIcon variant="transparent" onClick={handleNext}>
+        <ActionIcon variant="transparent" onClick={handleNext} data-testid="btn-next">
           <IconRight width={26} height={26} fill="none" />
         </ActionIcon>
       </Group>
@@ -75,16 +75,16 @@ function ViewComments() {
   const workouts = useMainStore(({ workouts }) => workouts);
   const mapIds = useMemo(() => new Map(workouts.map((r) => [r.id, r.label])), [workouts]);
   const dataRow = useMainStore(({ noticeDate, schedule }) => schedule.get(noticeDate));
-  if (!dataRow) {
-    return null;
-  }
-  dataRow.children;
   return (
-    <Stack key={dataRow.date}>
-      {dataRow.children.map((r) => (
-        <ViewComment key={r.time} date={dataRow.date} data={r} mapIds={mapIds} />
-      ))}
-    </Stack>
+    <>
+      {dataRow && (
+        <Stack key={dataRow.date}>
+          {dataRow.children.map((r) => (
+            <ViewComment key={r.time} date={dataRow.date} data={r} mapIds={mapIds} />
+          ))}
+        </Stack>
+      )}
+    </>
   );
 }
 

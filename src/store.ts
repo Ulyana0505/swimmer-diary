@@ -42,6 +42,7 @@ export const useMainStore = createWithEqualityFn(
           scheduleYear: _2,
           noticeDate: _3,
           scheduleRemove: _4,
+          workoutOpenId: _5,
           ...data
         } = newValue.state;
         const str = JSON.stringify({
