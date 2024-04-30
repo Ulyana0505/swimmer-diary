@@ -69,7 +69,7 @@ const router = createBrowserRouter(
       ]
     }
   ],
-  { basename: "/swimmer-diary/" }
+  { basename: window.jest ? "/" : "/swimmer-diary/" }
 );
 
 export default router;

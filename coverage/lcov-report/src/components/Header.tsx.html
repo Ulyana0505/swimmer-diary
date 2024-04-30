@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -128,27 +128,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,13 +161,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -184,16 +184,16 @@ import { getHandle } from "../utils.ts";
 import { useEffect } from "react";
 import mainPic from "../assets/main.png";
 &nbsp;
-export default function Header() {
-  const ids = useMatches();
-  const currentTitle = getHandle(ids[ids.length - 1]).title;
-  const rootTitle = getHandle(router.routes[0].children![0]).title;
+export default function <span class="fstat-no" title="function not covered" >Header(</span>) {
+  const ids = <span class="cstat-no" title="statement not covered" >useMatches();</span>
+  const currentTitle = <span class="cstat-no" title="statement not covered" >getHandle(ids[ids.length - 1]).title;</span>
+  const rootTitle = <span class="cstat-no" title="statement not covered" >getHandle(router.routes[0].children![0]).title;</span>
 &nbsp;
-  useEffect(() =&gt; {
-    document.title = currentTitle === rootTitle ? currentTitle : `${currentTitle} - ${rootTitle}`;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    document.title = currentTitle === rootTitle ? currentTitle : `${currentTitle} - ${rootTitle}`;</span>
   }, [currentTitle, rootTitle]);
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;nav className={styles.nav}&gt;
       &lt;MainLink /&gt;
       &lt;PagesLinks /&gt;
@@ -201,9 +201,9 @@ export default function Header() {
   );
 }
 &nbsp;
-function MainLink() {
-  const route = router.routes[0].children![0];
-  return (
+function <span class="fstat-no" title="function not covered" >MainLink(</span>) {
+  const route = <span class="cstat-no" title="statement not covered" >router.routes[0].children![0];</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className={styles.main}&gt;
       &lt;div&gt;
         &lt;Link to={route.path!} className={styles.main}&gt;
@@ -219,14 +219,14 @@ function MainLink() {
   );
 }
 &nbsp;
-function PagesLinks() {
-  const ids = useMatches();
-  const currentId = ids[1].id;
-  return (
+function <span class="fstat-no" title="function not covered" >PagesLinks(</span>) {
+  const ids = <span class="cstat-no" title="statement not covered" >useMatches();</span>
+  const currentId = <span class="cstat-no" title="statement not covered" >ids[1].id;</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className={styles.pages}&gt;
       &lt;ul&gt;
-        {router.routes[0].children!.slice(1).map((route) =&gt; (
-          &lt;li key={route.path} className={route.id === currentId ? styles.current : void 0}&gt;
+        {router.routes[0].children!.slice(1).map(<span class="fstat-no" title="function not covered" >(r</span>oute) =&gt; (
+<span class="cstat-no" title="statement not covered" >          &lt;li key={route.path} className={route.id === currentId ? styles.current : void 0}&gt;</span>
             &lt;Link to={route.path!}&gt;{getHandle(route).linkText}&lt;/Link&gt;
           &lt;/li&gt;
         ))}
@@ -241,7 +241,7 @@ function PagesLinks() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-30T14:10:35.407Z
+                at 2024-04-30T14:26:36.970Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
