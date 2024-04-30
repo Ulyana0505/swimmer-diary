@@ -1,4 +1,5 @@
 require("@testing-library/jest-dom");
+require("jest-fetch-mock").enableMocks();
 
 const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);

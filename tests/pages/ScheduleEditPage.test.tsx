@@ -61,13 +61,13 @@ describe("ScheduleEditPage", () => {
     await user.click(result.getByText("Добавить тренировку"));
     await selectFirstWorkout();
     await user.click(result.getByTestId("btn-add"));
-    expect(useMainStore.getState().schedule.get("2024-04-20")!.children.length).toEqual(1);
+    expect([...useMainStore.getState().schedule.values()][1].children.length).toEqual(1);
 
     // добавляем к существующему тренировочному дню еще одно время
     await user.click(result.getByText("Добавить тренировку"));
     await selectFirstWorkout();
     await user.click(result.getByText("вечер"));
     await user.click(result.getByTestId("btn-add"));
-    expect(useMainStore.getState().schedule.get("2024-04-20")!.children.length).toEqual(2);
+    expect([...useMainStore.getState().schedule.values()][1].children.length).toEqual(2);
   });
 });

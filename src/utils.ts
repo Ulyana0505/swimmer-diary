@@ -1,5 +1,4 @@
 import { RouteHandle, TagStruct } from "./types.ts";
-import { AgnosticRouteObject } from "@remix-run/router/utils.ts";
 
 export const cssBlock = "block";
 
@@ -23,7 +22,8 @@ export function gotoSchedule(link: string) {
   return `/${pathSchedule}${link}`;
 }
 
-export function getHandle(route: AgnosticRouteObject) {
+// eslint-disable-next-line
+export function getHandle(route: any) {
   return route.handle as RouteHandle;
 }
 

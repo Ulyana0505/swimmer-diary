@@ -6,8 +6,9 @@ const config = {
   //testEnvironment: "jsdom",
   testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
-    "\\.svg": "<rootDir>/jest.mock-svg.js",
-    "^.+\\.(css|less|scss|png)$": "identity-obj-proxy",
+    "\\.svg": "<rootDir>/jest.mock.svg.js",
+    "\\.png": "<rootDir>/jest.mock.png.js",
+    "^.+\\.(css|less|scss)$": "identity-obj-proxy",
     "^nanoid(/(.*)|$)": "nanoid$1"
   },
   transform: {
