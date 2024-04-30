@@ -50,10 +50,12 @@ export async function timer(t = 0) {
   return new Promise((r) => setTimeout(r, t));
 }
 
-export function scheduleRow(day: number) {
+export function scheduleRow(day_source: number) {
   const now = new Date();
+  now.setDate(day_source);
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
+  const day = now.getDate();
   const date = `${year}-${("0" + month).slice(-2)}-${("0" + day).slice(-2)}`;
   const row = {
     date,
